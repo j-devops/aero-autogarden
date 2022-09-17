@@ -1,0 +1,112 @@
+
+- id: '1662529069543'
+  alias: growroom1-veg-cycle-on
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.growroom1_veg_cycle
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - service: script.turn_on
+    data: {}
+    target:
+      entity_id: script.growroom1_veg_script
+  - service: notify.devops_nights
+    data:
+      message: VEG cycle on
+  mode: single
+- id: '1662566864126'
+  alias: growroom1-light-cyle-veg
+  description: ''
+  trigger:
+  - platform: time
+    at: '22:30:00'
+  condition:
+  - condition: state
+    entity_id: input_boolean.growroom1_veg_cycle
+    state: 'on'
+  action:
+  - type: turn_on
+    device_id: ec51c9a3eeaef19ec020ea03b2fe54c5
+    entity_id: switch.grow_light
+    domain: switch
+  - delay:
+      hours: 18
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  - type: turn_off
+    device_id: ec51c9a3eeaef19ec020ea03b2fe54c5
+    entity_id: switch.grow_light
+    domain: switch
+  mode: single
+- id: '1662955996694'
+  alias: growroom1-veg-cycle-off
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.growroom1_veg_cycle
+    from: 'on'
+    to: 'off'
+  condition: []
+  action:
+  - service: script.turn_off
+    data: {}
+    target:
+      entity_id: script.growroom1_veg_script
+  mode: single
+- id: '1663006770786'
+  alias: growroom1-auto-drain
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.growroom1_veg_cycle
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - repeat:
+      while:
+      - condition: state
+        entity_id: input_boolean.growroom1_veg_cycle
+        state: 'on'
+      sequence:
+      - type: turn_on
+        device_id: ec51c9a3eeaef19ec020ea03b2fe54c5
+        entity_id: switch.drain_pump
+        domain: switch
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 40
+          milliseconds: 0
+      - type: turn_off
+        device_id: ec51c9a3eeaef19ec020ea03b2fe54c5
+        entity_id: switch.drain_pump
+        domain: switch
+      - delay:
+          hours: 1
+          minutes: 0
+          seconds: 0
+          milliseconds: 0
+  mode: single
+- id: '1663390101736'
+  alias: drain-pump-auto-off
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.drain_pump_current_consumption
+    above: 40
+    below: 42
+  condition: []
+  action:
+  - type: turn_off
+    device_id: ec51c9a3eeaef19ec020ea03b2fe54c5
+    entity_id: switch.drain_pump
+    domain: switch
+  mode: single

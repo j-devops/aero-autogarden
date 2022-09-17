@@ -1,0 +1,32 @@
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+influxdb:
+  host: a0d7b954-influxdb
+  port: 8086
+  database: homeassistant
+  username: homeassistant
+  password: password
+  max_retries: 3
+  default_measurement: state
+
+template:
+  - sensor:
+      - name: "VPD (Vapor Pressure Deficit)"
+        unique_id: 'Sensor.VPD.test'
+        unit_of_measurement: "kPa"
+        state_class: measurement
+        state: >-
+          {% set T = ((states('sensor.qingping_air_monitor_lite_temperature') | float) - 32) * 5/9 %}
+          {% set RH = states('sensor.qingping_air_monitor_lite_humidity')|float %}
+          {% set SVP = 0.61078 * e ** (17.2694 * T / (T + 238.3)) %}
+          {% set VPD = ((100-RH) / 100) * SVP %}
+          {{-VPD | round(2) -}}

@@ -1,0 +1,49 @@
+growroom1_veg_script:
+  alias: growroom1-veg-script
+  sequence:
+  - repeat:
+      until:
+      - condition: state
+        entity_id: input_boolean.growroom1_veg_cycle
+        state: 'off'
+      sequence:
+      - type: turn_on
+        device_id: ec51c9a3eeaef19ec020ea03b2fe54c5
+        entity_id: switch.aero_pump
+        domain: switch
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 10
+          milliseconds: 0
+      - type: turn_off
+        device_id: ec51c9a3eeaef19ec020ea03b2fe54c5
+        entity_id: switch.aero_pump
+        domain: switch
+      - delay:
+          hours: 0
+          minutes: 5
+          seconds: 0
+          milliseconds: 0
+  mode: restart
+  icon: mdi:air-filter
+growroom1_flower_cycle:
+  alias: growroom1-flower-script
+  sequence:
+  - repeat:
+      until:
+      - condition: state
+        entity_id: input_boolean.growroom1_flower_cycle
+        state: 'off'
+      sequence:
+      - type: turn_on
+        device_id: ec51c9a3eeaef19ec020ea03b2fe54c5
+        entity_id: switch.aero_pump
+        domain: switch
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 15
+          milliseconds: 0
+      - type: turn_off
+        device_id: ec51c9a3eeaef19ec020ea03
