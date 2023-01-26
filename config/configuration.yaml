@@ -30,3 +30,28 @@ template:
           {% set SVP = 0.61078 * e ** (17.2694 * T / (T + 238.3)) %}
           {% set VPD = ((100-RH) / 100) * SVP %}
           {{-VPD | round(2) -}}
+     
+#NZ_Attic code to auto calc 
+#        - name: "Leaf VPD"
+#          unit_of_measurement: "kPa"
+#          state: >
+#            {% set T_Air = states('sensor.scd_41_2_temperature') | float %}  #replace with your own Temp sensor
+#            {% set T_Leaf = states('sensor.object_temperature_2') | float %} #replace with your own MLX90614 IR sensor
+#            {% set RH = states('sensor.scd_41_2_humidity') | float %} #replace with your own humidity sensor
+#            {% set e = 2.71828 %}
+#            {% set ASVP = 0.61078 * e ** (T_Air / (T_Air + 238.3) * 17.2694) %}
+#            {% set LSVP = 0.61078 * e ** (T_Leaf / (T_Leaf + 238.3) * 17.2694) %}
+#            {% set AVPD = ASVP - (ASVP * RH/100) %}
+#            {% set LVPD = LSVP - (ASVP * RH/100) %}
+#            {{ LVPD | round(2) }}
+ 
+#        - name: "Tent VPD"
+#          unit_of_measurement: "kPa"
+#          state: >
+#            {% set T_Air = states('sensor.scd_41_2_temperature') | float %} #replace with your own Temp sensor
+#            {% set RH = states('sensor.scd_41_2_humidity') | float %} #replace with your own humidity sensor
+#            {% set e = 2.71828 %}
+#            {% set ASVP = 0.61078 * e ** (T_Air / (T_Air + 238.3) * 17.2694) %}
+#            {% set AVPD = ASVP * 1 - (ASVP * RH/100) %}
+#            {{ AVPD | round(2) }}
+#
